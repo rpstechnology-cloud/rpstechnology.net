@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPS Technology: Weightless AI Automation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            z-index: 1000;
+        }
+
+        .brand {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-decoration: none;
+            letter-spacing: -0.03em;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .brand:hover {
+            opacity: 0.8;
+        }
+
+        .nav-items {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-item {
+            color: #ffffff;
+            background: none;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            opacity: 1;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .spa-section {
+            position: absolute;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            min-height: calc(100vh - 80px);
+            padding: 4rem 5%;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px);
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .spa-section.active-section {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: clamp(2.2rem, 5.5vw, 5rem);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 1100px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        @media(min-width: 600px) {
+            .grid-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .grid-btn {
+            background-color: #000000;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            padding: 18px 32px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            outline: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .full-width-btn {
+            grid-column: 1 / -1;
+            padding: 22px 32px;
+            font-size: 1.25rem;
+            letter-spacing: 0.02em;
+        }
+
+        .grid-btn:hover {
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+            transform: scale(1.05);
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        @keyframes breathingWhiteGlow {
+            0% {
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            }
+
+            50% {
+                box-shadow: 0 0 25px rgba(255, 255, 255, 0.7);
+            }
+
+            100% {
+                box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        .grid-btn.breathe-active {
+            animation: breathingWhiteGlow 3s infinite ease-in-out;
+        }
+
+        .section-header {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: center;
+            letter-spacing: -0.03em;
+        }
+
+        .section-sub {
+            font-size: 1.1rem;
+            opacity: 0.7;
+            margin-bottom: 3rem;
+            text-align: center;
+            max-width: 700px;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16 / 9;
+            border: 2px solid #ffffff;
+            border-radius: 16px;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, #000000 80%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 3rem;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .video-wrapper:hover {
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+        }
+
+        .video-inner-play {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            background-color: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-inner-play:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+            background-color: #ffffff;
+        }
+
+        .video-inner-play::before {
+            content: '';
+            border-style: solid;
+            border-width: 10px 0 10px 16px;
+            border-color: transparent transparent transparent #ffffff;
+            margin-left: 4px;
+            transition: border-color 0.3s ease;
+        }
+
+        .video-inner-play:hover::before {
+            border-color: transparent transparent transparent #000000;
+        }
+
+        .logo-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 1000px;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .partner-box {
+            padding: 12px 24px;
+            border: 1px dashed rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        .tech-card {
+            width: 100%;
+            max-width: 900px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            background-color: rgba(255, 255, 255, 0.02);
+            padding: 2.5rem;
+            line-height: 1.8;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .tech-block h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tech-block h3::before {
+            content: '■';
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .construction-graphic {
+            width: 100%;
+            max-width: 450px;
+            aspect-ratio: 1;
+            border: 2px dashed rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: slowRotate 25s linear infinite;
+        }
+
+        .construction-static {
+            position: absolute;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-align: center;
+        }
+
+        @keyframes slowRotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .contact-card-custom {
+            width: 100%;
+            max-width: 550px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 4rem 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.02);
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+            animation: breathingWhiteGlow 4s infinite ease-in-out;
+            border-radius: 12px;
+        }
+
+        .contact-card-custom:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .details-matrix {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+            width: 100%;
+            margin-top: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .detail-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.5;
+        }
+
+        .detail-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            display: inline-block;
+        }
+
+        .detail-link:hover {
+            opacity: 0.8;
+            transform: scale(1.02);
+        }
+
+        .order-btn {
+            background-color: transparent;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            outline: none;
+        }
+
+        .order-btn:hover {
+            background-color: #ffffff;
+            color: #000000;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        #tidio-chatbot-integration-container {
+            margin-top: 2.5rem;
+            width: 100%;
+            font-size: 0.8rem;
+            opacity: 0.4;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <span class="brand" onclick="switchSpaView('section-home')">RPS Technology</span>
+        <div class="nav-items">
+            <button class="nav-item active" onclick="switchSpaView('section-home')">Home</button>
+            <button class="nav-item" onclick="switchSpaView('section-support')">Support AI</button>
+            <button class="nav-item" onclick="switchSpaView('section-reviews')">Reviews</button>
+            <button class="nav-item" onclick="switchSpaView('section-system')">Systems</button>
+            <button class="nav-item" onclick="switchSpaView('section-builder')">Builder</button>
+            <button class="nav-item" onclick="switchSpaView('section-contact')">Contact</button>
+        </div>
+    </nav>
+
+    <main id="section-home" class="spa-section active-section">
+        <h1 class="hero-title">RPS Technology: Weightless AI Automation.</h1>
+        <div class="grid-container">
+            <button class="grid-btn" onclick="switchSpaView('section-support')">Support AI Systems</button>
+            <button class="grid-btn" onclick="switchSpaView('section-reviews')">Google Review Automation</button>
+            <button class="grid-btn" onclick="switchSpaView('section-system')">Auto Email/WhatsApp System</button>
+            <button class="grid-btn" onclick="switchSpaView('section-builder')">Website Builder</button>
+            <button class="grid-btn full-width-btn breathe-active" onclick="switchSpaView('section-contact')">Contact
+                Us</button>
+        </div>
+    </main>
+
+    <main id="section-support" class="spa-section">
+        <h2 class="section-header">Support AI Systems</h2>
+        <p class="section-sub">Next-generation autonomous client support systems</p>
+        <div class="video-wrapper">
+            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/r3TwJUkb0Jk"
+                title="YouTube video player" frameborder="0" allowfullscreen style="border-radius:16px;">
+            </iframe>
+
+        </div>
+        <div class="logo-strip">
+            <div class="partner-box">PARTNER ALPHA</div>
+            <div class="partner-box">PARTNER BETA</div>
+            <div class="partner-box">PARTNER GAMMA</div>
+            <div class="partner-box">PARTNER DELTA</div>
+        </div>
+    </main>
+
+    <main id="section-reviews" class="spa-section">
+        <h2 class="section-header">Google Review Automation</h2>
+        <p class="section-sub">Algorithmic public verification and Automated Analysis</p>
+        <div class="video-wrapper">
+            <div class="video-inner-play"></div>
+            <p style="margin-top: 1rem; font-size: 0.9rem; letter-spacing: 0.05em; opacity: 0.8;">PROJECT DEMONSTRATION
+                VIEWER</p>
+        </div>
+    </main>
+
+    <main id="section-system" class="spa-section">
+        <h2 class="section-header">Technical Infrastructure Architecture</h2>
+        <p class="section-sub">Deep integration mechanics mapping messaging logic triggers to machine inference layers
+        </p>
+        <div class="tech-card">
+            <div class="tech-block">
+                <h3>WhatsApp Business API & Webhook Inference</h3>
+                <p>WhatsApp API Automation helps businesses automatically communicate with customers on WhatsApp using
+                    AI and smart workflows. It can instantly reply to customer queries, collect leads, book
+                    appointments, send order updates, and provide 24/7 support without manual effort. Businesses use it
+                    to save time, improve customer experience, and never miss potential customers. The system connects
+                    WhatsApp with tools like AI chatbots, Google Sheets, CRMs, and automation platforms to handle
+                    conversations efficiently. It is widely used by hotels, clinics, restaurants, ecommerce stores, and
+                    many other businesses to grow faster and automate support.
+                </p>
+            </div>
+            <div style="height: 1px; background-color: rgba(255, 255, 255, 0.15); width: 100%;"></div>
+            <div class="tech-block">
+                <h3>Auto Email Sentiment Lead Scoring Frameworks</h3>
+                <p>Automated Enterprise Email funnels continuously intercept inbound communications and run raw strings
+                    through lightweight localized sentiment analysis pipeline algorithms. By extracting keyword
+                    polarities, urgency semantics, and negative feedback matrices, the infrastructure assigns granular
+                    numerical conversion priority indices to each account. Highly positive, qualified purchase inquiries
+                    automatically elevate to instant staff routing notification triggers, while standard support queries
+                    funnel into background drip nurture threads.</p>
+            </div>
+        </div>
+    </main>
+
+    <main id="section-builder" class="spa-section">
+        <h2 class="section-header">Website Builder Engine</h2>
+        <p class="section-sub">High-performance custom Single Page Application frameworks</p>
+        <div style="position: relative; display: flex; align-items: center; justify-content: center; margin-top: 2rem;">
+            <div class="construction-graphic"></div>
+            <div class="construction-static">UNDER<br>CONSTRUCTION</div>
+        </div>
+    </main>
+
+    <main id="section-contact" class="spa-section">
+        <div class="contact-card-custom">
+            <h2 class="section-header" style="font-size: 2.2rem; margin-bottom: 0.5rem;">Contact Us</h2>
+            <p style="font-size: 0.85rem; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.1em;">RPS
+                Technology Direct Gateway</p>
+
+            <div class="details-matrix">
+                <div class="detail-item">
+                    <span class="detail-label">Direct Line</span>
+                    <a href="tel:+917397660353" class="detail-link">+91 7397660353</a>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Corporate orders</span>
+                    <a href="mailto:mohammedshafin@rpstechnology.net"
+                        class="detail-link">mohammedshafin@rpstechnology.net</a>
+                </div>
+            </div>
+
+            <button class="order-btn"
+                onclick="alert('Initializing custom order sequence. Direct gateway linked via administrative contact lines.')">Order
+                Now</button>
+
+            <div id="tidio-chatbot-integration-container">[ Run By OpenAI ]</div>
+        </div>
+    </main>
+
+    <script>
+        function switchSpaView(targetId) {
+            const sections = document.querySelectorAll('.spa-section');
+            sections.forEach(sec => {
+                sec.classList.remove('active-section');
+            });
+            const targetSec = document.getElementById(targetId);
+            if (targetSec) {
+                targetSec.classList.add('active-section');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            const navButtons = document.querySelectorAll('.nav-item');
+            navButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('onclick').includes(targetId)) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
